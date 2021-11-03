@@ -18,12 +18,12 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     depends_on:
       - php
-      - mysql
+      - db
     networks:
       - laravel
 
   # Database Service
-  mysql:
+  db:
     # If you're using Mac with ARM architecture processor add uncomment the below code
     # platform: linux/x86_64
     image : mysql
@@ -35,8 +35,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
+      MYSQL_DATABASE: gateway
+      MYSQL_USER: gateway
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
       SERVICE_TAGS: dev
@@ -53,5 +53,21 @@ services:
       - ./src:/var/www
     ports:
       - "9000:9000"
+    networks:
+      - laravel
+
+  # phpmyadmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "3400"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+    depends_on:
+      - db
+    volumes:
+      - ./phpmyadmin/data:/sessions
     networks:
       - laravel
