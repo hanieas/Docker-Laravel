@@ -56,18 +56,13 @@ services:
     networks:
       - laravel
 
-  # phpmyadmin Service
+  #phpMyAdmin Service
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: unless-stopped
     ports:
-      - "3400"
-    environment:
-      PMA_HOST: db
-      PMA_PORT: "3306"
+      - "3400:80"
     depends_on:
       - db
-    volumes:
-      - ./phpmyadmin/data:/sessions
     networks:
       - laravel
