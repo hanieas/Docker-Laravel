@@ -1,0 +1,57 @@
+version: '3.8'
+
+# Docker Networks
+networks:
+  laravel:
+
+services:
+
+  # Web Server Service
+  nginx:
+    image: nginx:alpine
+    command: nginx -g "daemon off;"
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - laravel
+
+  # Database Service
+  mysql:
+    # If you're using Mac with ARM architecture processor add uncomment the below code
+    # platform: linux/x86_64
+    image : mysql
+    container_name : mysql
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  # PHP Service
+  php:
+    build: 
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel
