@@ -1,4 +1,4 @@
-# Laravel Local Environment with Docker
+# Setting Up Laravel Local Environment with Docker
 
 
 ## Execution steps
