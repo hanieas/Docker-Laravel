@@ -9,7 +9,6 @@ services:
   # Web Server Service
   nginx:
     image: nginx:alpine
-    command: nginx -g "daemon off;"
     container_name: nginx
     ports:
       - "8080:80"
@@ -17,35 +16,28 @@ services:
       - ./src:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     depends_on:
-      - php
+      - app
       - db
     networks:
       - laravel
 
   # Database Service
   db:
-    # If you're using Mac with ARM architecture processor add uncomment the below code
-    # platform: linux/x86_64
     image : mysql
     container_name : mysql
-    restart: unless-stopped
-    tty: true
     volumes:
       - ./mysql/data:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: gateway
-      MYSQL_USER: gateway
-      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: blog
       MYSQL_ROOT_PASSWORD: password
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
     networks:
       - laravel
 
-  # PHP Service
-  php:
+  # Application Service
+  app:
+    container_name: blog
     build: 
       context: ./php
       dockerfile: Dockerfile
@@ -55,11 +47,12 @@ services:
       - "9000:9000"
     networks:
       - laravel
+    working_dir: /var/www
 
   #phpMyAdmin Service
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    restart: unless-stopped
+    container_name: phpmyadmin
     ports:
       - "3400:80"
     depends_on:

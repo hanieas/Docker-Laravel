@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePublishersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreatePublishersTable extends Migration
      */
     public function up()
     {
-        Schema::create('publishers', function (Blueprint $table) {
-            $table->id();
-            $table->string('identifier')->unique();
-            $table->string('fname');
-            $table->string('lname');
-            $table->timestamps();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -29,6 +27,6 @@ class CreatePublishersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('publishers');
+        Schema::dropIfExists('password_resets');
     }
-}
+};
