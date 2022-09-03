@@ -1,9 +1,5 @@
 version: '3.8'
 
-# Docker Networks
-networks:
-  laravel:
-
 services:
 
   # Web Server Service
@@ -18,22 +14,29 @@ services:
     depends_on:
       - app
       - db
-    networks:
-      - laravel
 
-  # Database Service
+  #Database Service
+  # db:
+  #   image : mysql
+  #   container_name : mysql
+  #   volumes:
+  #     - ./mysql/data:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_DATABASE: blog
+  #     MYSQL_ROOT_PASSWORD: password
   db:
-    image : mysql
-    container_name : mysql
+    image: postgres
+    container_name: postgres
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - ./postgresql/data:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: blog
-      MYSQL_ROOT_PASSWORD: password
-    networks:
-      - laravel
+      - "5432:5432"
+    environment: 
+      POSTGRES_DB: blog
+      POSTGRES_USER: root 
+      POSTGRES_PASSWORD: password 
 
   # Application Service
   app:
@@ -45,17 +48,23 @@ services:
       - ./src:/var/www
     ports:
       - "9000:9000"
-    networks:
-      - laravel
     working_dir: /var/www
 
   #phpMyAdmin Service
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: phpmyadmin
+  #   ports:
+  #     - "3400:80"
+  #   depends_on:
+  #     - db
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
     ports:
-      - "3400:80"
+      - "5050:80"
     depends_on:
-      - db
-    networks:
-      - laravel
+      - db 
+    environment:
+      PGADMIN_DEFAULT_EMAIL: hanieasemi76@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password 
