@@ -11,9 +11,8 @@ Setting up Laravel in the local environment with Docker using the LEMP stack tha
 
 ## How to Install and Run the Project
 
-1. ```git clone git@github.com:hanieas/Docker-Laravel.git```
-2. ```cd src```
-3. ```composer install```
+1. ``` git clone git@github.com:hanieas/Docker-Laravel.git ```
+2. ``` docker-compose exec app composer install ```
 3. Copy ```.env.example``` to ```.env```
 4. ```docker-compose build```
 5. ```docker compose up -d```
