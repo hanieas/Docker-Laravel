@@ -1,7 +1,12 @@
-FROM php:8.0.3-fpm
+FROM php:8.2.11-fpm
+
+# Install composer
+RUN echo "\e[1;33mInstall COMPOSER\e[0m"
+RUN cd /tmp \
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
 RUN docker-php-ext-install pdo pdo_mysql
-
 
 RUN apt-get update
 
@@ -27,22 +32,22 @@ RUN apt-get -y install --fix-missing \
     libonig-dev \
     libxml2-dev
     
-RUN echo "\e[1;33mInstall important docker dependencies\e[0m"
-RUN docker-php-ext-install \
-    exif \
-    pcntl \
-    bcmath \
-    ctype \
-    curl \
-    iconv \
-    xml \
-    soap \
-    pcntl \
-    mbstring \
-    tokenizer \
-    bz2 \
-    zip \
-    intl
+# RUN echo "\e[1;33mInstall important docker dependencies\e[0m"
+# RUN docker-php-ext-install \
+#     exif \
+#     pcntl \
+#     bcmath \
+#     ctype \
+#     curl \
+#     iconv \
+#     xml \
+#     soap \
+#     pcntl \
+#     mbstring \
+#     tokenizer \
+#     bz2 \
+#     zip \
+#     intl
 
 # Install Postgre PDO
 RUN apt-get install -y libpq-dev \
